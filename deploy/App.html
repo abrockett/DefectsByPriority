@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DefectsByPriority</title>
+
+    <script type="text/javascript" src="/apps/x/sdk.js"></script>
+
+    <script type="text/javascript">
+        Rally.onReady(function () {
+                Ext.define("Rally.apps.defectsbypriority.Calculator",{prepareChartData:function(store){var categories=[],resolveImmediately=[],highAttention=[],normal=[],low=[],none=[];return store.each(function(defect){Ext.Array.contains(categories,defect.raw._CreatedAt)?"Resolve Immediately"===defect.raw.Priority?resolveImmediately[Ext.Array.indexOf(categories,defect.raw._CreatedAt)]+=1:"High Attention"===defect.raw.Priority?highAttention[Ext.Array.indexOf(categories,defect.raw._CreatedAt)]+=1:"Normal"===defect.raw.Priority?normal[Ext.Array.indexOf(categories,defect.raw._CreatedAt)]+=1:"Low"===defect.raw.Priority?low[Ext.Array.indexOf(categories,defect.raw._CreatedAt)]+=1:"None"===defect.raw.Priority&&(none[Ext.Array.indexOf(categories,defect.raw._CreatedAt)]+=1):(Ext.Array.insert(categories,categories.length,[defect.raw._CreatedAt]),"Resolve Immediately"===defect.raw.Priority?(Ext.Array.insert(resolveImmediately,resolveImmediately.length,[1]),Ext.Array.insert(highAttention,highAttention.length,[0]),Ext.Array.insert(normal,normal.length,[0]),Ext.Array.insert(low,low.length,[0]),Ext.Array.insert(none,none.length,[0])):"High Attention"===defect.raw.Priority?(Ext.Array.insert(resolveImmediately,resolveImmediately.length,[0]),Ext.Array.insert(highAttention,highAttention.length,[1]),Ext.Array.insert(normal,normal.length,[0]),Ext.Array.insert(low,low.length,[0]),Ext.Array.insert(none,none.length,[0])):"Normal"===defect.raw.Priority?(Ext.Array.insert(resolveImmediately,resolveImmediately.length,[0]),Ext.Array.insert(highAttention,highAttention.length,[0]),Ext.Array.insert(normal,normal.length,[1]),Ext.Array.insert(low,low.length,[0]),Ext.Array.insert(none,none.length,[0])):"Low"===defect.raw.Priority?(Ext.Array.insert(resolveImmediately,resolveImmediately.length,[0]),Ext.Array.insert(highAttention,highAttention.length,[0]),Ext.Array.insert(normal,normal.length,[0]),Ext.Array.insert(low,low.length,[1]),Ext.Array.insert(none,none.length,[0])):"None"===defect.raw.Priority&&(Ext.Array.insert(resolveImmediately,resolveImmediately.length,[0]),Ext.Array.insert(highAttention,highAttention.length,[0]),Ext.Array.insert(normal,normal.length,[0]),Ext.Array.insert(low,low.length,[0]),Ext.Array.insert(none,none.length,[1])))}),{categories:categories,series:[{name:"Resolve Immediately",data:resolveImmediately,color:"#EF3F35"},{name:"High Attention",data:highAttention,color:"#F47168"},{name:"Normal",data:normal,color:"#FCB5B1"},{name:"Low",data:low,color:"#E57E3A"},{name:"None",data:none,color:"#D9AF4B"}]}}});
+                Ext.define("Rally.apps.defectsbypriority.App",{extend:"Rally.app.App",requires:["Rally.apps.defectsbypriority.Calculator"],componentCls:"app",items:[{xtype:"container",itemId:"chart",componentCls:"chart"}],launch:function(){this._makeChart()},_makeChart:function(){this.chart&&this.down("#chart").remove(this.chart),this.chart=this.down("#chart").add({xtype:"rallychart",componentCls:"chart",storeType:"Rally.data.WsapiDataStore",storeConfig:{model:"Defect",fetch:!0,filters:[{property:"CreationDate",operator:">",value:Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date,"day",-180))}],limit:1/0,context:this.context.getDataContext()},calculatorType:"Rally.apps.defectsbypriority.Calculator",calculatorConfig:{},chartColors:[],queryErrorMessage:"No Defects Found for the Selected Time Range",chartConfig:{chart:{type:"column"},title:{text:"Defects by Priority"},plotOptions:{column:{stacking:"normal",groupPadding:0,borderWidth:0}},xAxis:{labels:{formatter:function(){var size=this.chart.axes[0].categories.length,piece=Ext.util.Format.number(size/10,"0");for(i=0;size>i;i++){if("0"===piece)return this.value;0!==i%piece&&(this.chart.axes[0].categories[i]="")}return this.value}}},yAxis:{title:{text:"Defect Count"}},legend:{enabled:!0},tooltip:{enabled:!1}}})}});
+
+            Rally.launchApp('Rally.apps.defectsbypriority.App', {
+                name:"DefectsByPriority",
+	            parentRepos:""
+            });
+
+        });
+    </script>
+
+
+    <style type="text/css">
+        .chart {
+    width: 750px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+    </style>
+</head>
+<body></body>
+</html>
