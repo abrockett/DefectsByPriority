@@ -1,8 +1,8 @@
 {
     "name": "DefectsByPriority",
     "className": "Rally.apps.defectsbypriority.App",
-    "server": "https://test7cluster.rallydev.com",
-    "sdk": "x",
+    "server": "https://test15cluster.rallydev.com",
+    "sdk": "2.0rc1",
     "javascript": [
         "Calculator.js",
         "App.js"
